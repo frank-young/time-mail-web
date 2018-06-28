@@ -64,11 +64,11 @@
           <div class="select-left">
             <label class="select-label">
               <input class="select-radio" v-model="letter.is_public" type="radio" name="public" :value="1" checked>
-              <div class="select-radio-tips" :class="{active: letter.is_public === 1}">公开</div>
+              <div class="select-radio-tips" :class="{'active': letter.is_public === 1}">公开</div>
             </label>
             <label class="select-label">
               <input class="select-radio" v-model="letter.is_public" type="radio" name="public" :value="0">
-              <div class="select-radio-tips" :class="{active: letter.is_public === 0}">不公开</div>
+              <div class="select-radio-tips" :class="{'active': letter.is_public === 0}">不公开</div>
             </label>
           </div>
         </div>
@@ -84,6 +84,7 @@
       </div>
     </div>
     <toast :toast-msg.sync="toastMsg" :is-show.sync="isShow"></toast>
+    <main-nav></main-nav>
   </div>
 </template>
 
@@ -93,6 +94,7 @@ import API from '@/api'
 import Validator from 'validator.tool'
 import Toast from '@/components/common/toast'
 import { Datetime } from 'vux'
+import MainNav from '@/components/common/main-nav'
 
 export default {
   data () {
@@ -129,7 +131,8 @@ export default {
   },
   components: {
     Toast,
-    Datetime
+    Datetime,
+    MainNav
   },
   watch: {
     arriveYear (to) {
@@ -265,6 +268,7 @@ export default {
 <style scoped lang="less">
 .container {
   background-color: #fff;
+  padding-bottom: 50px;
   .tips {
     padding: 15px 50px;
     line-height: 1.7em;

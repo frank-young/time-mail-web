@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .toast {
   position: fixed;
   left: 50%;
