@@ -1,7 +1,7 @@
 <template>
   <div class="like-group" @click="toggleLike" :class="{'like-animation': isLike}">
     <div class="like-icon">
-      <image class="like-image" src="/static/images/like.png"></image>
+      <img class="like-image" src="./img/like.png">
     </div>
     <div class="like-btn">
       喜欢
@@ -56,7 +56,7 @@ export default {
     transition: all .3s;
     .like-image {
       animation: likechange 0.6s 1 steps(19);
-      left: -450px;
+      left: -950px;
     }
     .like-btn {
       color: #fff;

@@ -266,6 +266,8 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "~@/assets/theme/base.less";
+
 .container {
   background-color: #fff;
   padding-bottom: 50px;
@@ -274,8 +276,8 @@ export default {
     line-height: 1.7em;
     text-align: center;
     color: #fff;
-    background-color: #0D45E4;
-    // background: linear-gradient(180deg, #0D45E4, #3D45E4);
+    background-color: @primary-color;
+    // background: linear-gradient(180deg, @primary-color, #3D45E4);
     font-size: 20px;
     letter-spacing: 4px;
   }
@@ -377,7 +379,7 @@ export default {
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 2px;
-    background-color: #0D45E4;
+    background-color: @primary-color;
     border-color: transparent;
     border-radius: 45px;
     color: #fff;
@@ -405,7 +407,7 @@ export default {
   }
 }
 .animate-background {
-  background: linear-gradient(241deg, #FF8C47, #0D45E4, #22E099, #FF5D36);
+  background: linear-gradient(241deg, #FF8C47, @primary-color, #22E099, #FF5D36);
   background-size: 800%, 800%;
   animation: rainbow 8s ease infinite;
 }

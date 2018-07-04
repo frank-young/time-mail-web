@@ -23,10 +23,10 @@ request.interceptors.response.use((res) => {
 
 export default {
   getPublicLetters (params) {
-    return request.get('letter/list', params)
+    return request.get('letter/list', { params })
   },
   getLetter (params) {
-    return request.get('letter/show', params)
+    return request.get('letter/show', { params })
   },
   sendLetter (data) {
     return request.post('letter/store', data)
@@ -42,7 +42,7 @@ export default {
   },
   // 评论
   getComments (params) {
-    return request.get('comment/list', params)
+    return request.get('comment/list', { params })
   },
   // 评论
   addComment (data) {

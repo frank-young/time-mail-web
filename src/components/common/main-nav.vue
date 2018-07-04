@@ -1,12 +1,12 @@
 <template>
   <div class="man-nav">
     <tabbar>
-      <tabbar-item :selected="selectTag === 'write' ? true : false" link="/write">
+      <tabbar-item :selected="selectTag === 'write' ? true : false" :link="{name: 'Write'}">
         <i slot="icon" class="icon icon-write"></i>
         <i slot="icon-active" class="icon icon-write-hover"></i>
         <span class="tab-label" slot="label">写信</span>
       </tabbar-item>
-      <tabbar-item :selected="selectTag === 'find' ? true : false" link="/find">
+      <tabbar-item :selected="selectTag === 'find' ? true : false" :link="{name: 'Find'}">
         <i slot="icon" class="icon icon-find"></i>
         <i slot="icon-active" class="icon icon-find-hover"></i>
         <span class="tab-label" slot="label">发现</span>
