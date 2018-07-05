@@ -15,7 +15,7 @@ export default new Router({
       component: Write
     },
     {
-      path: '/success',
+      path: '/write/success',
       name: 'Success',
       component: Success
     },

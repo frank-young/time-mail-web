@@ -4,93 +4,96 @@
       {{ configText.text1 }}
     </div>
     <div class="letter-main">
-      <div class="letter-empty" v-if="letters.length === 0">
-        <img class="letter-empty-icon" src="./img/empty-letter.png">
-      </div>
-      <div class="letter-ul" v-else>
-        <div class="letter-li" v-for="letter in letters" :key="letter.id">
-          <div class="letter-box" @click="toDetail(letter.id)">
-            <div class="letter-avatar">
-              <img class="letter-image" :src="letter.wxuser.data.avatar">
-            </div>
-            <div class="letter-content">
-              <div class="letter-title">
-                {{ letter.meta }}
+      <pull-to :top-load-method="pullToRefresh" @infinite-scroll="loadMore">
+        <div class="letter-empty" v-if="letters.length === 0">
+          <img class="letter-empty-icon" src="./img/empty-letter.png">
+        </div>
+        <div class="letter-ul" v-else>
+          <div class="letter-li" v-for="letter in letters" :key="letter.id">
+            <div class="letter-box" @click="toDetail(letter.id)">
+              <div class="letter-avatar">
+                <img class="letter-image" :src="letter.wxuser.data.avatar">
               </div>
-              <div class="letter-desc">
-                {{ letter.description }}
-              </div>
-              <div class="letter-meta">
-                <div class="letter-meta-left">
-                    写于{{ letter.create_date }}
+              <div class="letter-content">
+                <div class="letter-title">
+                  {{ letter.meta }}
                 </div>
-                <div class="letter-meta-right">
-                  <img class="letter-meta-right-icon" src="./img/heart.png">
-                  <div class="letter-meta-right-text">
-                    {{ letter.like_count }} 人喜欢
+                <div class="letter-desc">
+                  {{ letter.description }}
+                </div>
+                <div class="letter-meta">
+                  <div class="letter-meta-left">
+                      写于{{ letter.create_date }}
+                  </div>
+                  <div class="letter-meta-right">
+                    <img class="letter-meta-right-icon" src="./img/heart.png">
+                    <div class="letter-meta-right-text">
+                      {{ letter.like_count }} 人喜欢
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        <load-more :tip="isLastPage ? '暂无更多数据' : '正在加载'" :show-loading="!isLastPage"></load-more>
+      </pull-to>
     </div>
     <main-nav select-tag="find"></main-nav>
   </div>
 </template>
 
 <script>
-import API from '@/api'
+import { LoadMore } from 'vux'
 import MainNav from '@/components/common/main-nav'
+import { mapState, mapActions } from 'vuex'
+import PullTo from 'vue-pull-to'
 
 export default {
   data () {
     return {
-      letters: [],
-      configText: {
-        text1: ''
-      },
-      page: {
-        page: 1,
-        page_size: 15
-      },
-      loading: false
     }
   },
+  computed: {
+    ...mapState('letter', {
+      letters: state => state.list,
+      page: state => state.page,
+      isLastPage: state => state.isLastPage
+    }),
+    ...mapState('prompt', {
+      configText: state => state.configText
+    })
+  },
   components: {
-    MainNav
+    MainNav,
+    PullTo,
+    LoadMore
   },
   created () {
-    this.getPrompt()
     this.getPublicLetters()
   },
   methods: {
-    async getPublicLetters () {
+    ...mapActions('letter', [
+      'getLetters'
+    ]),
+    pullToRefresh (loaded) {
+      this.getPublicLetters('refresh', loaded)
+    },
+    loadMore () {
+      console.log('loader')
+      this.getPublicLetters('loadmore')
+    },
+    async getPublicLetters (type = 'cache', cb) {
+      let first = this.page === 1 && type === 'cache'
+      console.log(first)
       try {
-        const res = await API.getPublicLetters({include: 'wxuser', ...this.page})
-        let { status, data } = res.data
-        if (status) {
-          this.letters = [...this.letters, ...data.data]
-          this.page.page += 1
-        }
-      } catch (e) {
-        console.log(e)
-      }
+        await this.getLetters(type)
+        if (typeof cb === 'function') cb()
+      } finally {}
     },
     // 跳转详情
     toDetail (id) {
       this.$router.push({name: 'FindDetail', query: { id }})
-    },
-    async getPrompt () {
-      try {
-        const res = await API.getPrompt()
-        if (res.data !== null) {
-          this.configText = res.data
-        }
-      } catch (e) {
-        console.log(e)
-      }
     }
   }
 }
@@ -100,6 +103,8 @@ export default {
 .letter {
   padding-bottom: 50px;
   .tips {
+    position: relative;
+    z-index: 10;
     padding: 15px 50px;
     line-height: 1.7em;
     text-align: center;
@@ -112,6 +117,7 @@ export default {
   min-height: 100vh;
   /* background-color: #eceff1; */
   &-main {
+    height: calc(100vh - 114px);
   }
   &-li {
     padding: 15px;
