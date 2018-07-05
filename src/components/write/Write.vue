@@ -91,10 +91,11 @@
 <script>
 import miment from 'miment'
 import API from '@/api'
-import Validator from 'validator.tool'
 import Toast from '@/components/common/toast'
 import { Datetime } from 'vux'
 import MainNav from '@/components/common/main-nav'
+import { mapState } from 'vuex'
+import { validate } from './config'
 
 export default {
   data () {
@@ -107,13 +108,6 @@ export default {
         email: '',
         phone: '',
         arrive_time: miment().add(1, 'YYYY').format('YYYY-MM-DD')
-      },
-      // 默认配置文字
-      configText: {
-        tips: '把梦想寄给未来',
-        titlePlaceholder: '标题',
-        letterPlaceholder: '',
-        share_message: '给10年后的自己写一封信如何？'
       },
       sendText: '寄送到未来',
       // 时间选择
@@ -140,24 +134,16 @@ export default {
     }
   },
   computed: {
+    ...mapState('prompt', {
+      configText: state => state.configText
+    })
   },
   created () {
-    this.getPrompt()
   },
   mounted () {
     this.judeTheUserInfo()
   },
   methods: {
-    async getPrompt () {
-      try {
-        const res = await API.getPrompt()
-        if (res.data !== null) {
-          this.configText = res.data.data
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    },
     // 默认到达年份选择
     arriveYearChange (e) {
       this.arriveYear = Number(e.target.value)
@@ -180,7 +166,7 @@ export default {
     },
     // 提交
     async submit () {
-      let res = this.validate(this.letter)
+      let res = validate(this.letter)
       if (!res.bool) {
         this.show(res.msg)
         return
@@ -194,32 +180,6 @@ export default {
       } catch (e) {
         console.log(e)
         this.failSend()
-      }
-    },
-    // 验证
-    validate (data) {
-      let v = new Validator()
-      let bool = false
-      let msg = ''
-
-      if (!v.required(data.title)) {
-        msg = '标题不能为空'
-      } else if (!v.maxLength(data.title, 100)) {
-        msg = '标题长度过长'
-      } else if (!v.required(data.content)) {
-        msg = '内容不能为空'
-      } else if (!v.minLength(data.content, 5)) {
-        msg = '内容太短咯～'
-      } else if (!v.isEmail(data.email)) {
-        msg = '邮箱格式错误哟～'
-      } else if (!v.isPhone(data.phone)) {
-        msg = '手机格式错误哟～'
-      } else {
-        bool = true
-      }
-      return {
-        bool,
-        msg
       }
     },
     // 分离提交状态

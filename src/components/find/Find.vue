@@ -101,7 +101,7 @@ export default {
 
 <style scoped lang="less">
 .letter {
-  padding-bottom: 50px;
+  min-height: 100vh;
   .tips {
     position: relative;
     z-index: 10;
@@ -114,14 +114,14 @@ export default {
     font-size: 20px;
     letter-spacing: 8px;
   }
-  min-height: 100vh;
-  /* background-color: #eceff1; */
   &-main {
     height: calc(100vh - 114px);
+    background-color: #f8f8f8;
   }
   &-li {
     padding: 15px;
     border-bottom: 1px solid #eee;
+    background-color: #fff;
   }
   &-box {
     display: flex;
@@ -188,4 +188,28 @@ export default {
     margin-bottom: 10px;
   }
 }
+</style>
+
+<style lang="less">
+  .default-text {
+    margin: 0 !important;
+    font-size: 12px;
+    color: #999;
+  }
+  .weui-loadmore_line .weui-loadmore__tips {
+    top: 0 !important;
+  }
+  .weui-loadmore_line {
+    &:before,
+    &:after {
+      top: 10px !important;
+    }
+  }
+  .weui-loadmore__tips {
+    color: #999;
+  }
+  .weui-loadmore {
+    margin: 15px auto !important;
+    font-size: 12px !important;
+  }
 </style>

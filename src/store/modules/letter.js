@@ -52,7 +52,7 @@ export default {
 
       const { status, data } = res.data
       if (!status) return
-      if (page < data.meta.pagination.total_pages) {
+      if (page <= data.meta.pagination.total_pages) {
         commit(PAGE_NUMBER_ADD)
         // 下拉加载，重置list = []，放在这里为了防止数据加载的白屏
         if (type === REFRESH) commit(LETTER, [])
