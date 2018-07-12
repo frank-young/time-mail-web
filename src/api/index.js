@@ -1,15 +1,17 @@
 import serverPath from './config'
 import axios from 'axios'
+import { app } from '@/main.js'
 
 let request = axios.create({
   baseURL: serverPath,
   headers: {
-    'content-type': 'application/json',
-    'token': localStorage.getItem('token') || ''
+    'content-type': 'application/json'
   }
 })
 
 request.interceptors.request.use(config => {
+  const token = app.$store.state.userInfo.info.token || ''
+  if (token) config.headers.token = token
   return config
 }, error => {
   return Promise.reject(error)
@@ -51,5 +53,8 @@ export default {
   // 获取额外信息
   getPrompt (data) {
     return request.get('prompt/show', data)
+  },
+  loginByWeb (data) {
+    return request.post('auth/loginByWeb', data)
   }
 }

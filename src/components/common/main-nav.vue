@@ -11,7 +11,7 @@
         <i slot="icon-active" class="icon icon-find-hover"></i>
         <span class="tab-label" slot="label">发现</span>
       </tabbar-item>
-      <tabbar-item :selected="selectTag === 'user' ? true : false" link="/user">
+      <tabbar-item :selected="selectTag === 'ucenter' ? true : false" :link="{name: 'Ucenter'}">
         <i slot="icon" class="icon icon-user"></i>
         <i slot="icon-active" class="icon icon-user-hover"></i>
         <span class="tab-label" slot="label">我的</span>

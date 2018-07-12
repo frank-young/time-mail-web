@@ -178,7 +178,6 @@ export default {
         await API.sendLetter(this.letter)
         this.successSend()
       } catch (e) {
-        console.log(e)
         this.failSend()
       }
     },

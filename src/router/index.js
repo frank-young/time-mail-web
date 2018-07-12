@@ -4,6 +4,8 @@ import Write from '@/components/write/Write'
 import Find from '@/components/find/Find'
 import FindDetail from '@/components/find/FindDetail'
 import Success from '@/components/success/Success'
+import Ucenter from '@/components/ucenter/Ucenter'
+import Feedback from '@/components/ucenter/Feedback'
 
 Vue.use(Router)
 
@@ -28,6 +30,16 @@ export default new Router({
       path: '/find/detail',
       name: 'FindDetail',
       component: FindDetail
+    },
+    {
+      path: '/ucenter',
+      name: 'Ucenter',
+      component: Ucenter
+    },
+    {
+      path: '/ucenter/feedback',
+      name: 'Feedback',
+      component: Feedback
     }
   ]
 })

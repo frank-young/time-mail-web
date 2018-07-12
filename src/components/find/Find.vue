@@ -80,12 +80,10 @@ export default {
       this.getPublicLetters('refresh', loaded)
     },
     loadMore () {
-      console.log('loader')
       this.getPublicLetters('loadmore')
     },
     async getPublicLetters (type = 'cache', cb) {
-      let first = this.page === 1 && type === 'cache'
-      console.log(first)
+      // let first = this.page === 1 && type === 'cache'
       try {
         await this.getLetters(type)
         if (typeof cb === 'function') cb()

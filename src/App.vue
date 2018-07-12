@@ -19,6 +19,7 @@ export default {
   },
   created () {
     this.getPrompt()
+    this.loginByWeb()
   },
   watch: {
     '$route' (to, from) {
@@ -36,6 +37,9 @@ export default {
   methods: {
     ...mapActions('prompt', [
       'getPrompt'
+    ]),
+    ...mapActions('userInfo', [
+      'loginByWeb'
     ])
   }
 }
@@ -89,6 +93,8 @@ export default {
 }
 
 #app {
+  width: 100vw;
+  height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -96,4 +102,9 @@ html, body {
   padding: 0;
   margin: 0 !important;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 </style>
