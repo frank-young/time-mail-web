@@ -25,7 +25,7 @@
           </div>
           <div class="detail-meta">
             <div class="detail-like">
-              <like-btn @click="toggleLike" :is-like.sync="letter.is_like" :count.sync="letter.like_count"></like-btn>
+              <like-btn @click="toggleLike" :is-like="!!letter.is_like" :count="letter.like_count"></like-btn>
             </div>
           </div>
         </div>
@@ -40,11 +40,11 @@
             <div class="comment-li" v-for="comment in comments" :key="comment.id">
               <div class="comment-box">
                 <div class="comment-avatar">
-                  <img class="comment-image" :src="comment.wxuser.data.avatar">
+                  <img class="comment-image" :src="comment.wxuser && comment.wxuser.data.avatar">
                 </div>
                 <div class="comment-desc">
                   <div class="comment-name">
-                    {{ comment.wxuser.data.nickname }}
+                    {{ comment.wxuser && comment.wxuser.data.nickname }}
                   </div>
                   <div class="comment-datetime">
                     {{ comment.time.date }}
@@ -94,32 +94,33 @@ export default {
         }
       },
       comments: [],
-      letterId: 0,
       commentContent: '',
       // toast
       isShow: false,
       toastMsg: ''
     }
   },
+  computed: {
+    letterId () {
+      return this.$route.query.id
+    }
+  },
   created () {
-    this.letterId = this.$route.query.id
     this.getLetter()
+    this.getComments()
   },
   methods: {
     async getLetter () {
-      const { letter, comments } = await this._getData()
-      if (letter.data.status) {
-        this.letter = letter.data.data.data
-      }
-      if (comments.data.status) {
-        this.comments = comments.data.data.data
-      }
+      try {
+        const res = await API.getLetter({ id: this.letterId, include: 'wxuser' })
+        const { status, data } = res.data
+        if (status) this.letter = data.data
+      } catch (e) {}
     },
-    async _getData () {
-      const letter = await API.getLetter({ id: this.letterId, include: 'wxuser' })
-      const comments = await API.getComments({ letter_id: this.letterId, include: 'wxuser' })
-
-      return { letter, comments }
+    async getComments () {
+      const res = await API.getComments({ letter_id: this.letterId })
+      const { status, data } = res.data
+      if (status) this.comments = data.data
     },
     toggleLike () {
       this.letter.is_like = !this.letter.is_like
@@ -133,8 +134,12 @@ export default {
       API.dislike({letter_id: this.letterId})
     },
     async addComment () {
+      if (!this.commentContent) {
+        this.show('评论不能为空')
+        return
+      }
       let res = await API.addComment({letter_id: this.letterId, content: this.commentContent})
-      this.getLetter()
+      this.getComments()
       this.show(res.message)
     },
     show (msg) {

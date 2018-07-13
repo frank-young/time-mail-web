@@ -3,10 +3,10 @@
     <div class="ucenter-box">
       <div class="ucenter-header">
         <div class="ucenter-avatar">
-          <img class="ucenter-image" :src="userInfo.avatar || ''"/>
+          <img class="ucenter-image" :src="userInfo && userInfo.avatar"/>
         </div>
         <div class="ucenter-name">
-          {{ userInfo.nickname }}
+          {{ userInfo && userInfo.nickname }}
         </div>
       </div>
       <div class="ucenter-ul">
@@ -78,13 +78,12 @@ export default {
     width: 75px;
     height: 75px;
     margin: 0 auto 15px;
-    border-radius: 50%;
     overflow: hidden;
+    background-color: #fff;
   }
   &-image {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
   }
   &-name {
     font-size: 14px;
