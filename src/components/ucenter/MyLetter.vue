@@ -1,8 +1,6 @@
 <template>
   <div class="letter">
-    <div class="tips">
-      {{ configText.text1 }}
-    </div>
+    <x-header title="我的信件"></x-header>
     <div class="letter-main">
       <pull-to :top-load-method="pullToRefresh" @infinite-scroll="loadMore">
         <div class="letter-ul" v-if="letters.length">
@@ -11,18 +9,21 @@
           </div>
         </div>
         <div class="letter-empty" v-else>
-          正在玩命的加载...
+          <div class="letter-empty_text">
+            暂时还没有信件~
+          </div>
+          <button class="letter-empty_btn" @click="goHome">
+            赶紧去写一封
+          </button>
         </div>
         <load-more v-if="letters.length" :tip="isLastPage ? '暂无更多数据' : '正在加载'" :show-loading="!isLastPage"></load-more>
       </pull-to>
     </div>
-    <main-nav select-tag="find"></main-nav>
   </div>
 </template>
 
 <script>
-import { LoadMore } from 'vux'
-import MainNav from '@/components/common/main-nav'
+import { LoadMore, XHeader } from 'vux'
 import { mapState, mapActions } from 'vuex'
 import FindItem from '@/components/common/FindItem'
 import PullTo from 'vue-pull-to'
@@ -33,26 +34,23 @@ export default {
     }
   },
   computed: {
-    ...mapState('letter', {
+    ...mapState('myLetter', {
       letters: state => state.list,
       page: state => state.page,
       isLastPage: state => state.isLastPage
-    }),
-    ...mapState('prompt', {
-      configText: state => state.configText
     })
   },
   components: {
-    MainNav,
     PullTo,
     LoadMore,
-    FindItem
+    FindItem,
+    XHeader
   },
   created () {
     this.getPublicLetters()
   },
   methods: {
-    ...mapActions('letter', [
+    ...mapActions('myLetter', [
       'getLetters'
     ]),
     pullToRefresh (loaded) {
@@ -62,11 +60,13 @@ export default {
       this.getPublicLetters('loadmore')
     },
     async getPublicLetters (type = 'cache', cb) {
-      // let first = this.page === 1 && type === 'cache'
       try {
         await this.getLetters(type)
         if (typeof cb === 'function') cb()
       } finally {}
+    },
+    goHome () {
+      this.$router.push({name: 'Write'})
     }
   }
 }
@@ -83,21 +83,33 @@ export default {
     text-align: center;
     color: #fff;
     background-color: #0D45E4;
-    // background: linear-gradient(180deg, #0D45E4, #3D45E4);
     font-size: 20px;
     letter-spacing: 8px;
   }
   &-main {
     position: fixed;
-    top: 64px;
+    top: 47px;
     width: 100%;
-    height: calc(100vh - 114px);
+    height: calc(100vh - 47px);
     background-color: #f8f8f8;
   }
   &-empty {
-    padding: 150px 20px;
+    padding: 100px 20px;
     text-align: center;
+  }
+  &-empty_text {
+    text-align: center;
+    font-size: 14px;
     color: #666;
+  }
+  &-empty_btn {
+    padding: 10px 30px;
+    margin-top: 30px;
+    border: 1px solid #0D45E4;
+    background-color: #fff;
+    border-radius: 4px;
+    color: #0D45E4;
+    outline: none;
   }
 }
 </style>

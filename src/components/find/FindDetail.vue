@@ -29,14 +29,12 @@
             </div>
           </div>
         </div>
-        <div class="split">
-
-        </div>
+        <div class="split"></div>
         <div class="detail-comment">
           <div class="comment-title">
             {{ letter.comment_count }} 人评论
           </div>
-          <div class="comment-ul">
+          <div class="comment-ul"  v-if="comments.length">
             <div class="comment-li" v-for="comment in comments" :key="comment.id">
               <div class="comment-box">
                 <div class="comment-avatar">
@@ -53,11 +51,14 @@
                     {{ comment.content }}
                   </div>
                 </div>
-                <div class="comment-meta">
+                <!-- <div class="comment-meta">
                   {{ comment.comment_like_count }} 点赞
-                </div>
+                </div> -->
               </div>
             </div>
+          </div>
+          <div class="comment-empty" v-else>
+            暂无评论，赶紧留下评论支持他吧～
           </div>
         </div>
       </div>
@@ -118,7 +119,7 @@ export default {
       } catch (e) {}
     },
     async getComments () {
-      const res = await API.getComments({ letter_id: this.letterId })
+      const res = await API.getComments({ letter_id: this.letterId, include: 'wxuser' })
       const { status, data } = res.data
       if (status) this.comments = data.data
     },
@@ -139,8 +140,12 @@ export default {
         return
       }
       let res = await API.addComment({letter_id: this.letterId, content: this.commentContent})
-      this.getComments()
-      this.show(res.message)
+      const { status, message } = res.data
+      if (status) {
+        this.letter.comment_count++
+        this.getComments()
+      }
+      this.show(message)
     },
     show (msg) {
       this.isShow = true
@@ -222,6 +227,13 @@ export default {
     font-size: 18px;
     color: #333;
   }
+  &-empty {
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+  }
   &-ul {
 
   }
@@ -248,9 +260,6 @@ export default {
     flex: 1;
     padding-left: 15px;
     border-bottom: 1px solid #eee;
-    &:last-of-type {
-      border: none;
-    }
   }
   &-name {
     color: #666;
@@ -305,7 +314,7 @@ export default {
   }
 }
 .split {
-  height: 20px;
+  height: 10px;
   margin: 0 -15px;
   background-color: #eee;
 }

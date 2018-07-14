@@ -56,5 +56,9 @@ export default {
   },
   loginByWeb (data) {
     return request.post('auth/loginByWeb', data)
+  },
+  // 获取我的邮件
+  getMyLetters (params) {
+    return request.get('letter/user/list', { params })
   }
 }

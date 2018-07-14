@@ -6,6 +6,8 @@ import FindDetail from '@/components/find/FindDetail'
 import Success from '@/components/success/Success'
 import Ucenter from '@/components/ucenter/Ucenter'
 import Feedback from '@/components/ucenter/Feedback'
+import AboutUs from '@/components/ucenter/AboutUs'
+import MyLetter from '@/components/ucenter/MyLetter'
 
 Vue.use(Router)
 
@@ -40,6 +42,16 @@ export default new Router({
       path: '/ucenter/feedback',
       name: 'Feedback',
       component: Feedback
+    },
+    {
+      path: '/ucenter/aboutus',
+      name: 'AboutUs',
+      component: AboutUs
+    },
+    {
+      path: '/ucenter/myletter',
+      name: 'MyLetter',
+      component: MyLetter
     }
   ]
 })

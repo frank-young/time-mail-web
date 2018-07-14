@@ -26,6 +26,14 @@
             意见反馈
           </div>
         </div>
+        <div class="ucenter-li" @click="toAboutUs">
+          <div class="ucenter-icon">
+            <img class="ucenter-icon-image" src="./img/roast.png"/>
+          </div>
+          <div class="ucenter-text">
+            我们的故事
+          </div>
+        </div>
       </div>
     </div>
     <main-nav select-tag="ucenter"></main-nav>
@@ -35,6 +43,9 @@
 <script>
 import MainNav from '@/components/common/main-nav'
 import { mapState } from 'vuex'
+
+const productId = 28278
+
 export default {
   components: {
     MainNav
@@ -53,11 +64,13 @@ export default {
   },
   methods: {
     toMyLetter () {
-
+      this.$router.push({name: 'MyLetter'})
     },
     toFeedback () {
-      const productId = 28278
       this.$router.push({name: 'Feedback', query: { productId }})
+    },
+    toAboutUs () {
+      this.$router.push({name: 'AboutUs', query: { productId }})
     }
   }
 }
@@ -69,7 +82,7 @@ export default {
   &-box {
   }
   &-header {
-    padding: 20px;
+    padding: 30px;
     text-align: center;
     color: #fff;
     background-color: #0D45E4;

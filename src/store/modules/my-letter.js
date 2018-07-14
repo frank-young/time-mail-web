@@ -48,7 +48,7 @@ export default {
       if (state.isLastPage && type === LOADMORE) return
       // 请求数据 - 第一次进入，刷新加载，加载更多都会请求数据
       const { page } = state
-      const res = await API.getPublicLetters({include: 'wxuser', page})
+      const res = await API.getMyLetters({include: 'wxuser', page})
 
       const { status, data } = res.data
       if (!status) return
