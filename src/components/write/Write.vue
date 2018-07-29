@@ -330,6 +330,8 @@ export default {
     color: #7A7881;
     font-size: 12px;
     text-align: center;
+    padding: 0;
+    display: block;
   }
   .send {
     width: 100%;

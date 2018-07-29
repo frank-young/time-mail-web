@@ -15,6 +15,7 @@ export default {
     list: [],
     page: 1,
     top: 0,
+    page_size: 15,
     isLastPage: false
   },
   mutations: {
@@ -47,7 +48,7 @@ export default {
       // 如果是最后一页并且是加载状态，即没有更多数据，直接返回
       if (state.isLastPage && type === LOADMORE) return
       // 请求数据 - 第一次进入，刷新加载，加载更多都会请求数据
-      const { page } = state
+      const { page, page_size: pageSize } = state
       const res = await API.getMyLetters({include: 'wxuser', page})
 
       const { status, data } = res.data
@@ -61,6 +62,7 @@ export default {
         // 加载到最后一页的标识
         commit(LAST_PAGE, true)
       }
+      if (state.list.length < pageSize) commit(LAST_PAGE, true)
     }
   }
 }
